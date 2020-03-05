@@ -113,7 +113,7 @@ DATABASES = {
         # postgresql
 
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'epak',
+        'NAME': 'epakwholesalers',
         'USER': 'postgres',
         'PASSWORD': 'zain',
         'HOST': '127.0.0.1',

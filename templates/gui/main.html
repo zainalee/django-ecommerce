@@ -1,0 +1,31 @@
+{% extends "gui/layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row pt-4">
+{% for product in products %}
+
+    <div class="col-sm-4">
+        <div class="card mb-4">
+            <div class="body">
+                <img class="rounded mx-auto d-block img-responsive" width="auto%" height="140px" src="{{product.image.url}}">
+            </div>
+            <div class="title m-0 p-0">
+                <h3 class="text-center"><b>{{product.title}}</b></h3>
+                <p class="text-right m-0 p-0 mr-4">Price per item <b class="badge badge-primary">{{product.price}} Rs</b></p>
+                <p class="text-right m-0 p-0 mr-4">{{product.minorder}} (Min Order)</p>
+                <p class="text-right m-0 p-0 mr-4">Available Quantity <span class="badge badge-danger">{{product.quantity}}</span></p>
+                    <div class="text-right m-0 p-0 mr-4">
+                        Add to Cart
+                    <i class="fa fa-lg fa-shopping-cart"></i>
+                    </div>
+                <div class="text-center">
+                <button class="btn btn-md btn-success mb-4">Order Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endfor %}
+</div>
+</div>
+{% endblock %}

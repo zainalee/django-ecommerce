@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Categories, Products, Feedback, Order
+from .models import Categories, Product, Feedback, Order
 
 
 class ProductsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user', 'category')
+    list_display = ('title', 'user', 'category', 'minorder', 'image')
     search_fields = ['title']
 
     filter_horizontal = ()
@@ -23,7 +23,7 @@ class CategoriesAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Categories, CategoriesAdmin)
-admin.site.register(Products, ProductsAdmin)
+admin.site.register(Product, ProductsAdmin)
 admin.site.register(Order)
 admin.site.register(Feedback)
 

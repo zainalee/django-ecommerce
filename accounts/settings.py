@@ -23,8 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'i(paju$+r1j-1^uc7ocfps+hr%cm(2h8($t8d9%(7uley)_%i2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
+DEBUG = True
 ALLOWED_HOSTS = ['epakwholesalers.herokuapp.com', '127.0.0.1']
 
 
@@ -42,6 +41,7 @@ INSTALLED_APPS = [
     'profiles',
     'products',
     'useradmin',
+    'main',
     'storages',
     'filters',
 ]
@@ -75,6 +75,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+            'tags': 'useradmin.templatetags.tags',
+
+            }
         },
     },
 ]
@@ -87,17 +91,44 @@ WSGI_APPLICATION = 'accounts.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'multiaccounts',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
+        # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        
+        # sqlite
+        
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': 'db.sqlite3',
+
+        # mysql
+
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'epak',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': '127.0.0.1',
+        # 'PORT': '3306',
+        # 'OPTIONS': {
+        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        # }
+
+        # postgresql
+
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'epak',
+        'USER': 'postgres',
+        'PASSWORD': 'zain',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+        # 'OPTIONS': {
+        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"y
+        # }
+
     }
 }
+
+import dj_database_url
+db_from_env=dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
 
 # AUTH_USER_MODEL = 'account.'
 
@@ -142,9 +173,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = [
-    os.path.join(BASE_DIR, 'static')
-]
+# STATIC_ROOT = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
 
 STATIC_URL = '/static/'
 

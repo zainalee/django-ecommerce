@@ -1,5 +1,5 @@
 from django.urls import path, include
-from profiles.api.views import SellerViewSet, BuyerViewSet
+from profiles.api.views import SellerViewSet, BuyerViewSet,CreateAPIView,registration
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
@@ -14,7 +14,8 @@ router.register('buyer', views.BuyerViewSet, basename='buyer')
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('seller', views.SellerViewSet.as_view())
+    path('create',CreateAPIView.as_view()),
+    path('registration',registration,name="register")
 ]
 
 

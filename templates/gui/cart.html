@@ -1,0 +1,105 @@
+{% extends "gui/layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+<div class="col-sm-12 col-md-12 col-lg-12">
+<div class="card">
+  <div class="card-body">
+
+    <!-- Shopping Cart table -->
+    <div class="table-responsive w-auto">
+
+      <table class="table table-sm product-table">
+
+        <!-- Table head -->
+        <thead class="mdb-color lighten-5">
+          <tr>
+            <th class="font-weight-bold">
+              <h4><strong class="badge badge-pill badge-success badge-md">Total Items in Cart : {{order.get_cart_items}}<strong></h4></th>
+            <th class="font-weight-bold">
+              <strong>Product</strong>
+            </th>
+            
+            <th></th>
+            <th class="font-weight-bold">
+              <strong>Price</strong>
+            </th>
+            <th class="font-weight-bold">
+              <strong>QTY</strong>
+            </th>
+            <th class="font-weight-bold">
+              <strong>Total Amount</strong>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <!-- /.Table head -->
+
+        <!-- Table body -->
+        <tbody>
+
+          <!-- First row -->
+          {% for item in items %}
+          <tr>
+            <th scope="row">
+              <img src="{{item.product.image.url}}" alt="" class="img-responsive"style="width:80px;height:80px">
+            </th>
+            <td>
+              <h5 class="">
+                <strong>{{item.product.title}}</strong>
+              </h5>
+              <p class="text-muted">{{item.product.category}}</p>
+            </td>
+            <td></td>
+            <td>{{item.product.price}} Rs.</td>
+            <td>
+              {% comment %} <input type="number" value="{{item.quantity}}" aria-label="Search" class="form-control" style="width: 100px"> {% endcomment %}
+              <h4 style="display:inline"><strong>{{item.quantity}}</strong></h4>
+              <i style="display:inline" class=" fa fa-arrow-up badge badge-dark update-cart" data-action="add" data-product={{item.product.id}}></i>
+              <span class="badge badge-dark"><i class="fa fa-arrow-down update-cart" data-action="remove" data-product={{item.product.id}}></i></span>
+            </td>
+            <td class="font-weight-bold">
+              <strong>{{item.get_total}}</strong>
+            </td>
+            <td>
+              <button type="button" class="btn btn-sm btn-primary update-cart" data-product={{item.product.id}} data-action="delete" data-toggle="tooltip" data-placement="top"
+                title="Remove item">X
+              </button>
+            </td>
+          </tr>
+           {% endfor %}
+          <tr>
+            <td colspan="3"></td>
+            <td>
+              <h4 class="mt-2">
+                <strong>Grand Total</strong>
+              </h4>
+            </td>
+            <td class="text-right">
+              <h4 class="mt-2">
+                <strong class="badge badge-primary">{{order.get_cart_total|floatformat:2}} Rs</strong>
+              </h4>
+            </td>
+            <td colspan="3" class="text-right">
+              <a href="{% url 'checkout' %}"type="button" class="btn btn-primary btn-rounded">Complete purchase
+                <i class="fas fa-angle-right right"></i>
+              </a>
+            </td>
+          </tr>
+          <!-- Fourth row -->
+
+        </tbody>
+        <!-- /.Table body -->
+
+      </table>
+
+    </div>
+    <!-- /.Shopping Cart table -->
+
+  </div>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,4 +1,5 @@
 {% load static %}
+{% comment %} {% load staticfiles %} {% endcomment %}
 {% load tags %}
 
 <style>
@@ -7,7 +8,7 @@
 }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-dark ">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-dark ">
   <a class="navbar-brand text-white" href="#">My Profile</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -21,22 +22,25 @@
         
       {% if request.user|has_group:"sellers"  %}
       <li class="nav-item">
-        <a class="nav-link text-white" href="{% url 'products' %}">Products</a>
+        <a class="nav-link text-white" href="{% url 'products' %}">My Products</a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-white" href="{% url 'createproduct' %}">Post New Product</a>
       </li>
-      
       {% endif %}
-      
-
-      
-      {% comment %} <li class="nav-item">
-        <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
-      </li> {% endcomment %}  
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'main' %}">Main</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'cart' %}"><i class="fa fa-shopping-cart" style="color:white"><span class="badge badge-pill badge-danger">{{orderItems}}</span></i></a>
+      </li>
     </ul>
     
   </div>
   <span id="message" class="text-white message">Hello {{request.user}} </span>
+    {% if user.is_authenticated%}
     <span id="logout" class="text-white message"><a class="text-white" href="{% url 'logout'%}">Logout</a></span>
+    {% else %}
+    <span id="logout" class="text-white message"><a class="text-white" href="{% url 'login'%}">Login</a></span>
+    {% endif%}
 </nav>

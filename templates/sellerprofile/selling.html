@@ -1,0 +1,37 @@
+{% extends "sellerprofile/layout.html" %}
+{% block content %}
+{% include "sellerprofile/navbar.html"%}
+{{uid}}
+<div class="container">
+    <div class="row justify-content-end">
+        <div class="col-sm-10 ">
+            <h3 class="pt-4 ml-4">Sales</h3>
+                <table class="table tabel-sm">
+                    <tr>
+                        <th>No.</th>
+                        <th>Order Id</th>
+                        <th>Title</th>
+                        <th>Quantity</th>
+                        <th>User</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Date Orderd</th>
+                    </tr>
+                        
+                        {% for order,orderitems,address in detail %}
+                                {% comment %} {% if uid == orderitems.product.user_id %} {% endcomment %}
+                                        {% comment %} {% if address.user == orderitems.user %} {% endcomment %}
+                                        <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{orderitems.order}}</td>
+                                        <td><p style="text-transform: capitalize">{{orderitems.product.title}}</p></td>
+                                        <td>{{orderitems.quantity}}</td>
+                                        <td>{{orderitems.user}}</td>
+                                        <td>{{address.city}}</td>
+                                        <td>{{address.state}}</td>
+                                        <td>{{orderitems.date_orderd}}</td>
+                                        </tr>
+                                        {% comment %} {% endif %} {% endcomment %}
+                                {% comment %} {% endif %} {% endcomment %}
+                        {% endfor%}
+{% endblock %}

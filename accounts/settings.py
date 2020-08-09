@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+import dj_database_url
 import os
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +26,8 @@ SECRET_KEY = 'i(paju$+r1j-1^uc7ocfps+hr%cm(2h8($t8d9%(7uley)_%i2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['epakwholesalers.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['epakwholesalers.herokuapp.com',
+                 '127.0.0.1', 'e7d8e34055b3.ngrok.io']
 
 
 # Application definition
@@ -38,13 +41,31 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'rest_framework.authtoken',
+    'django_filters',
+    # 'chartit',
     'profiles',
     'products',
     'useradmin',
     'main',
     'storages',
     'filters',
+    'crispy_forms',
+    'localflavor',
+    'six',
+    'jquery',
+    'bokeh',
+    # The general purpose templates
+    'django_adminlte',
+
+    # Optional: Skin for the admin interface
+    # 'django_adminlte_theme',
+
+    # Any apps which need to have their templates overridden by adminlte
+    # 'django.contrib.admin',
 ]
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -59,6 +80,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+# If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]  # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
+CORS_ORIGIN_REGEX_WHITELIST = [
+    'http://localhost:3000',
 ]
 
 ROOT_URLCONF = 'accounts.urls'
@@ -76,13 +106,14 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'libraries':{
-            'tags': 'useradmin.templatetags.tags',
+                'tags': 'useradmin.templatetags.tags',
 
             }
         },
     },
 ]
 
+# AUTH_USER_MODEL = 'profiles.Account'
 WSGI_APPLICATION = 'accounts.wsgi.application'
 
 
@@ -92,32 +123,32 @@ WSGI_APPLICATION = 'accounts.wsgi.application'
 DATABASES = {
     'default': {
         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        
+
         # sqlite
-        
+
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': 'db.sqlite3',
 
         # mysql
 
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'epak',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': '127.0.0.1',
-        # 'PORT': '3306',
-        # 'OPTIONS': {
-        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        # }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'epak1',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
 
         # postgresql
 
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'epakwholesalers',
-        'USER': 'postgres',
-        'PASSWORD': 'zain',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'epakwholesalers',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'zain',
+        # 'HOST': '127.0.0.1',
+        # 'PORT': '5432',
         # 'OPTIONS': {
         #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"y
         # }
@@ -125,8 +156,7 @@ DATABASES = {
     }
 }
 
-import dj_database_url
-db_from_env=dj_database_url.config(conn_max_age=600)
+db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
 
@@ -154,6 +184,21 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 8
 }
 
 # Internationalization
@@ -190,3 +235,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# smtp
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'epakwholesalers@gmail.com'
+EMAIL_HOST_PASSWORD = 'zaindinzadan_000'
+EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'Epicups Team <admin@epicups.com>'

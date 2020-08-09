@@ -2,6 +2,7 @@
 {% comment %} {% load widget_tweaks %} {% endcomment %}
 
 
+{% load crispy_forms_tags %}
 
 {% block content%}
 
@@ -28,12 +29,12 @@
   <div class="col-md-4">
   <p>
   {% comment %} <input id="product_name"  name="product_name" placeholder="PRODUCT NAME" class="form-control input-md" required="" type="text"> {% endcomment %}
-    {{form.title}}
+    {{form|crispy}}
     </p>
   </div>
 </div>
 
-
+{% comment %} 
 <!-- Select Basic -->
 <div class="form-group">
   <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
@@ -79,7 +80,7 @@
   <div class="col-md-4">
     <input id="filebutton" name="filebutton" class="input-file" type="file">
   </div>
-</div>
+</div> {% endcomment %}
 
 <!-- Button -->
 {% comment %} {{form.errors}} {% endcomment %}

@@ -1,0 +1,27 @@
+{% extends "gui/layout.html" %}
+{% block content %}
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-sm-3 col-md-5 col-lg-5">
+                <div>
+                    <img class="rounded mx-auto d-block img-responsive justify-content-center" width="auto%" height="300px" src="{{product_detail.image.url}}">
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <h1>{{product_detail.title}}</h1>
+                <h5 class="m-0 p-0">Product Detail :</h5> <p>{{product_detail.description}} <br><span> <b> Product by  <a href="{% url 'profile' %}">{{product_detail.user}} </a></b></span></p>
+                <span><p class="m-0 p-0">You can order minimun <b><span class="badge badge-primary"> {{product_detail.minorder}} </span> </b> Products or more</p></span>
+                <h3>Product Price : <span class="text-primary">{{product_detail.price}} Rs.</span></h3>
+                <h6>Reviews :
+                <span class="fa fa-star checked "></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                </h6>
+                <button  class="btn btn-lg btn-primary update-cart" data-product={{product_detail.id}} data-action="add" ><b><a href="{% url 'cart' %}"style="text-decoration: none;">ADD TO CART</a></b></button>
+                 <a class="btn btn-lg btn-primary ml-2 fa fa-lg fa-heart"></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

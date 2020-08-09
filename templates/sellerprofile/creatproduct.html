@@ -1,0 +1,103 @@
+{% extends "sellerprofile/layout.html" %}
+{% block content %}
+{% include "sellerprofile/navbar.html"%}
+{% load crispy_forms_tags %}
+<section class="content">
+      <div class="row justify-content-md-center mt-4">
+        <div class="col-md-6">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">CREATE NEW PRODUCT</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+            <div class="card-body">
+            <form class="form-horizontal" method="POST", action="{% url 'createproduct' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset>
+
+<!-- Form Name -->
+            <legend class="text-center"></legend>
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-6 control-label" for="product_name"></label>  
+  <div class="col-md-12">
+  <p>
+  {% comment %} <input id="product_name"  name="product_name" placeholder="PRODUCT NAME" class="form-control input-md" required="" type="text"> {% endcomment %}
+    {{form|crispy}}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+        {{message}}
+        </div>
+      {%endfor%}
+    {% endif %}
+    </p>
+  </div>
+</div>
+<div class="form-group">
+  <div class="row justify-content-center offset-4">
+  <div class="col-md-4  text-center">
+    <button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary" style="width:200px">Upload</button>
+  </div>
+  </div>
+  </div>
+
+</fieldset>
+</form>
+            {% comment %} <form name="form" class="form-horizontal" method="POST", action="" enctype="multipart/form-data">
+                {% csrf_token %}
+              <div class="form-group">
+                <label for="inputName">Name</label>
+                <input type="text" id="inputName" class="form-control" name={{title}}>
+              </div>
+              <div class="form-group">
+                <label for="inputDescription">Product Description</label>
+                <textarea id="inputDescription" class="form-control" rows="4" name="description"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="inputClientCompany">Price</label>
+                <input type="text" id="inputClientCompany" class="form-control" name="price">
+              </div>
+              <div class="form-group">
+                <label for="inputProjectLeader">Quantity</label>
+                <input type="text" id="inputProjectLeader" class="form-control" name="quantity">
+              </div>
+              <div class="form-group">
+                <label for="inputProjectLeader">Category</label>
+                <select  id="inputProjectLeader" class="form-control" name="category">
+                    {% for category in categories %}
+                        <option value={{category.title}}>{{category.title}}</option>
+                    {% endfor%}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="inputProjectLeader">Image</label>
+                <input type="file" id="inputProjectLeader"  name="image">
+              </div>
+              <div class="form-group">
+                <label for="inputProjectLeader">minorder</label>
+                <input type="text" id="inputProjectLeader" class="form-control"  name="minorder">
+              </div>
+              <div class="form-group">
+                <input type="submit" id="inputProjectLeader" class="btn btn-success" >
+              </div>
+              {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">
+                    {{message}}
+                    </div>
+                {%endfor%}
+              {% endif %} {% endcomment %}
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+
+{%endblock%}

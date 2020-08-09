@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Categories, Product, Feedback, Order
+from .models import Categories, Product, Feedback, Order, OrderItem
 
 
 class ProductsAdmin(admin.ModelAdmin):
@@ -25,6 +25,7 @@ class CategoriesAdmin(admin.ModelAdmin):
 admin.site.register(Categories, CategoriesAdmin)
 admin.site.register(Product, ProductsAdmin)
 admin.site.register(Order)
+admin.site.register(OrderItem)
 admin.site.register(Feedback)
 
 admin.site.site_header = "E-Pak Wholesaler Admin site"

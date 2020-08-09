@@ -9,6 +9,12 @@ class UserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+        help_texts = {
+            'username': None,
+            'email': None,
+            'password': None,
+            'password2': None,
+        }
 
     def save(self, commit=False):
         user = super().save()
@@ -24,20 +30,35 @@ class SellerFrom(forms.ModelForm):
         model = SellerProfile
         fields = ['city', 'cnic', 'address', 'state', 'shop_name', 'mobileNo']
 
+
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+        help_texts = {
+            'username': None,
+        }
+
+
+class CLoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+        help_texts = {
+            'username': None,
+        }
+
 # class ClientForm(forms.ModelForm):
 #     class Meta:
 #         model=User
-#         fields=['username','email','password'] 
+#         fields=['username','email','password']
 
 #     def save(self,commit=False):
 #         user=super.save()
 #         user.email=self.cleaned_data['email']
 #         if commit:
 #             user.save()
-#         return user       
-
-
-
+#         return user
 
 
 class ProductForm(forms.ModelForm):

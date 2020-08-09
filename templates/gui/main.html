@@ -1,31 +1,128 @@
 {% extends "gui/layout.html" %}
-{% block content %}
-<div class="container">
-<div class="row pt-4">
-{% for product in products %}
 
-    <div class="col-sm-4">
+{% comment %} {% extends 'adminlte/lib/_main_sidebar.html' %} {% endcomment %}
+
+
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container pt-4">
+    <div class="row text-center">
+        <div class="col-sm-12">
+        <form class="form form-check-inline">
+            {% comment %} <p><input class="form form-control" placeholder="Search..."> {% endcomment %}
+                <p style="display:inline" class="">{{filter.form|crispy}}
+                <span><button class="btn btn-success btn-md offset-4 mt-4" type="submit">Search</button></span>
+                </p>
+       
+        </div>
+    </div>
+</div>
+{% comment %} <div class="container">
+<div class="row pt-4">
+{% for product in product %}
+    <div class="col-sm-3">
         <div class="card mb-4">
             <div class="body">
-                <img class="rounded mx-auto d-block img-responsive" width="auto%" height="140px" src="{{product.image.url}}">
+                <img class="rounded mx-auto d-block img-responsive" width="auto%" height="120px" src="{{product.image.url}}">
             </div>
             <div class="title m-0 p-0">
-                <h3 class="text-center"><b>{{product.title}}</b></h3>
-                <p class="text-right m-0 p-0 mr-4">Price per item <b class="badge badge-primary">{{product.price}} Rs</b></p>
+                <h3 class="text-center decoration-none"><b><a href="{% url 'detailview' product.id %}" >{{product.title}}</a></b></h3>
+                <p class="text-right m-0 p-0 mr-4 justify-content-center">Price per item <b class="badge badge-primary">{{product.price}} Rs</b></p>
                 <p class="text-right m-0 p-0 mr-4">{{product.minorder}} (Min Order)</p>
                 <p class="text-right m-0 p-0 mr-4">Available Quantity <span class="badge badge-danger">{{product.quantity}}</span></p>
                     <div class="text-right m-0 p-0 mr-4">
                         Add to Cart
-                    <i class="fa fa-lg fa-shopping-cart"></i>
+                        <button class=" btn btn-outline add-btn update-cart "data-product={{product.id}} data-action="add"><i class="fa fa-lg fa-shopping-cart"></i></button>
                     </div>
-                <div class="text-center">
-                <button class="btn btn-md btn-success mb-4">Order Now</button>
+                <div class="text-center bg-light p-3">
+                <button class="btn btn-md btn-success">Order Now</button>
                 </div>
             </div>
         </div>
     </div>
 
 {% endfor %}
+
+</div> {% endcomment %}
+
+
+<!--Card-->
+<div class="container">
+<div class="row ">
+{% for product in product %}
+<div class="col-sm-3 mt-4" >
+<div class="card card-cascade card-ecommerce">
+  <!--Card image-->
+  <div class="view view-cascade overlay">
+    <img class="card-img-top img-responsive mx-auto d-block" style="height=200px;width=:200px" src="{{product.image.url}}"
+      alt="">
+    <a>
+      <div class="mask rgba-white-slight"></div>
+    </a>
+  </div>
+  <!--/.Card image-->
+
+  <!--Card content-->
+  <div class="card-body card-body-cascade text-center">
+    <!--Category & Title-->
+    
+    <h4 class="card-title m-0 p-0"><strong><a href="{% url 'detailview' product.id %}" >{{product.title}}</a></strong></h4>
+    <h5>{{product.category}}</h5>
+    <!--Rating-->
+    <span class="fa fa-star checked "></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+    <!--Description-->
+    <p class="card-text mt-0">Minimum products you can purchase <span class="badge badge-primary"> {{product.minorder}}</span></p>
+
+    <!--Card footer-->
+    <div class="card-footer">
+      <span class="float-left">{{product.price}} Rs</span>
+      <span class="float-right"><a class="" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><i
+            class="fas fa-heart"></i></a></span>
+            
+    </div>
+    <button class=" btn btn-secondary add-btn update-cart "data-product={{product.id}} data-action="add">Add to cart</button>
+  </div>
+  <!--/.Card content-->
+
+
 </div>
+
+<div>
+
+</div>
+
+</div>
+{% endfor %}
+<!--/.Card-->
+
+<div class="row offset-4 justify-content-center">
+    <div class="col-sm-8 pt-4 ">
+        {% if product.has_other_pages %}
+        <ul class="pagination pagination-lg">
+        {% if product.has_previous %}
+            <li class="page-item"><a class="page-link"  href="?page={{ product.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#"><span>&laquo;</span></a></li>
+        {% endif %}
+        {% for i in product.paginator.page_range %}
+            {% if product.number == i %}
+            <li class="page-item active"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if product.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ product.next_page_number }}">&raquo;</a></li>
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#"><span>&raquo;</span></a></li>
+        {% endif %}
+        </ul>
+{% endif %}
+    </div>
+
 </div>
 {% endblock %}

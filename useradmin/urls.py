@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 # from useradmin.views import adminstrator
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.main, name='adminhome'),
     path('demo', views.demo, name='demo'),
     path('shop', views.shop, name='shop'),
     path('profile', views.profile, name='profile'),
@@ -27,6 +27,9 @@ urlpatterns = [
     path('myOrders', views.myOrders, name='myorders'),
     path('selling', views.selling, name='selling'),
     path('adminhome', views.adminhome, name='adminhome'),
+    path('add_to_wishlist/<str:pk>', views.add_to_wishlist, name='add_to_wishlist'),
+    path('wishlist', views.wishlist, name='wishlist'),
+    #     path('add_review/<str:pk>', views.add_review, name='add_review'),
     # path('adminstrator', views.adminstrator, name='adminstrator')
 
     # password-reset

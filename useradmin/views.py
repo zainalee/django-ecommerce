@@ -6,7 +6,7 @@ from django.http import JsonResponse
 import json
 import datetime
 # from django.contrib.auth.forms import UserCreationForm
-from templates.gui.forms import UserForm, SellerFrom, ProductForm, LoginForm, CLoginForm
+from templates.gui.forms import UserForm, SellerFrom, ProductForm, LoginForm, CLoginForm, ReviewForm
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Subquery
 
@@ -36,6 +36,8 @@ from django.conf import settings
 
 def main(request):
     products_list = Product.objects.all()
+    # latest_review_list = Review.objects.filter(
+    #     product=pk).order_by('-pub_date')[:9]
     if request.user.is_authenticated:
         user = request.user
         order, created = Order.objects.get_or_create(user=user, complete=False)
@@ -67,21 +69,38 @@ def main(request):
 
 def detailview(request, pk):
     product_detail = Product.objects.get(id=pk)
-    user = Product.objects.filter(user=request.user)
+    latest_review_list = Review.objects.filter(
+        product=pk).order_by('-pub_date')[:9]
+    form = ReviewForm(request.POST)
+    if form.is_valid():
+        rating = form.cleaned_data['rating']
+        comment = form.cleaned_data['comment']
+        user_name = form.cleaned_data['user_name']
+        review = Review()
+        review.product = product_detail
+        review.user_name = user_name
+        review.rating = rating
+        review.comment = comment
+        review.pub_date = datetime.datetime.now()
+        review.save()
     if request.user.is_authenticated:
+        user = Product.objects.filter(user=request.user)
         user = request.user
         order, created = Order.objects.get_or_create(user=user, complete=False)
         items = order.orderitem_set.all()
         orderItems = order.get_cart_items
+
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0}
         orderItems = order['get_cart_items']
-    print("user ", user)
+    # print("user ", user)
     context = {
         'product_detail': product_detail,
-        'user': user,
-        'orderItems': orderItems
+        'latest_review_list': latest_review_list,
+        # 'user': user,
+        'orderItems': orderItems,
+        'form': form
     }
     return render(request, 'gui/detailview.html', context)
 
@@ -354,10 +373,8 @@ def updateItem(request):
         # return redirect('cart')
     elif action == 'remove':
         order_item.quantity = (order_item.quantity - 1)
-
     if action == 'delete':
         order_item.quantity = 0
-
     order_item.save()
     if order_item.quantity <= 0:
         order_item.delete()
@@ -436,15 +453,55 @@ def selling(request):
 
 
 def adminhome(request):
-    order = Order.objects.filter(user=request.user).select_related(
-        'user')
+    if request.user.is_authenticated:
+        wish_list = Wishlist.objects.filter(user=request.user)
+        order = Order.objects.filter(user=request.user)
     address = ShippingAddress.objects.select_related('order')
     uid = request.user.id
-    # orderitems = OrderItem.objects.filter(product.user == request.user.id)
     orderitems = OrderItem.objects.select_related('product', 'order')
+    total_orderitems = OrderItem.objects.filter(
+        product__user=request.user)
+    total_incom = 0
+    for price in total_orderitems:
+        total_incom = total_incom+price.price*price.quantity
     detail = zip(order, orderitems, address)
     total_product = Product.objects.filter(user=request.user).count()
-    # order_count = OrderItem.objects.filter().select_related('product')
     total_orders = OrderItem.objects.filter(
-        product__user=request.user).count()
-    return render(request, "sellerprofile/home.html", {'total_product': total_product, 'detail': detail, 'uid': uid, 'total_orders': total_orders})
+        product__user=request.user).filter(order__complete=1).count()
+    total_orders_analysis = OrderItem.objects.filter(
+        product__user=request.user).filter(date_orderd__month='8')
+    buyer_orders = 0
+    for o in order:
+        if o.complete == 1:
+            buyer_orders = OrderItem.objects.filter(
+                user=request.user).count()
+    total_spent = 0
+    total_buy = OrderItem.objects.filter(user=request.user)
+    for spent in total_buy:
+        total_spent = total_spent + spent.price*spent.quantity
+    context = {
+        'total_product': total_product,
+        'detail': detail,
+
+    }
+    return render(request, "sellerprofile/home.html", {'total_product': total_product, 'detail': detail, 'uid': uid, 'total_orders': total_orders, 'total_incom': total_incom, 'buyer_orders': buyer_orders, 'total_spent': total_spent, 'total_orders_analysis': total_orders_analysis, 'wish_list': wish_list})
+
+
+# @login_required
+def add_to_wishlist(request, pk):
+    if request.user.is_authenticated:
+        item = Product.objects.get(id=pk)
+
+        wished_item, created = Wishlist.objects.get_or_create(wished_item=item,
+                                                              user=request.user,
+                                                              )
+        messages.info(request, 'The item was added to your wishlist')
+    return redirect('main')
+
+
+@login_required
+def wishlist(request):
+    wishlist = Wishlist.objects.filter(user=request.user)
+    # product = Wishlist.objects.get(wished_item=pk)
+    # contnt = zip(wishlist, product)
+    return render(request, 'sellerprofile/wishlist.html', {'wishlist': wishlist})

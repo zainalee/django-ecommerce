@@ -64,8 +64,8 @@ class ObtainAuthTokenView(APIView):
                 "user": context
             })
         else:
-            context['response'] = 'Error'
-            context['error_message'] = 'Invalid credentials'
+            context['message'] = 'failure'
+            context['status'] = status.HTTP_422_UNPROCESSABLE_ENTITY
 
         return Response(context)
 

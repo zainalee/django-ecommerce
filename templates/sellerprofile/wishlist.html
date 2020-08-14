@@ -1,0 +1,15 @@
+{% extends "sellerprofile/layout.html" %}
+{% block content %}
+{% include "sellerprofile/navbar.html"%}
+    <div class="container">
+        <div class="row justify-content-end pt-4">
+            <div class="col-lg-9">
+                {% if wishlist %}
+                    {% for list in wishlist %}
+                        <li>{{list.wished_item.title}}</li>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{{% endblock %}

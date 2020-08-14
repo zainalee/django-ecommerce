@@ -1,5 +1,6 @@
 from products.models import Product, Categories, ShippingAddress
 from rest_framework import serializers
+from django.core.files.storage import default_storage
 
 
 class CategoriesSerializers(serializers.ModelSerializer):
@@ -10,14 +11,16 @@ class CategoriesSerializers(serializers.ModelSerializer):
 
 class ProductSerializers(serializers.ModelSerializer):
     # choices = ChoiceSerializer(many=True, read_only=True, required=False)
-    image = serializers.SerializerMethodField('validate_image_url')
+    # image = serializers.SerializerMethodField('validate_image_url')
+    image_url = serializers.SerializerMethodField('get_image_url')
+
     username = serializers.SerializerMethodField('get_username_from_author')
     category = serializers.SerializerMethodField('get_category_from_product')
 
     class Meta:
         model = Product
         fields = ('pk', 'title', 'slug', 'description',	'price',
-                  'quantity',	'minorder',	'image',	'category', 'username')
+                  'quantity',	'minorder', 'image', 'image_url', 'category', 'username')
 
     def get_username_from_author(self, product):
         username = product.user.username
@@ -27,12 +30,16 @@ class ProductSerializers(serializers.ModelSerializer):
         cat = product.category.title
         return cat
 
-    def validate_image_url(self, blog_post):
-        image = blog_post.image
-        new_url = image.url
-        if "?" in new_url:
-            new_url = image.url[:image.url.rfind("?")]
-        return new_url
+    def get_image_url(self, product):
+        return product.image.url
+
+    # def validate_image_url(self, product):
+    #     return product.image.url
+        # image = product.image
+        # new_url = image.url
+        # if "?" in new_url:
+        #     new_url = image.url[:image.url.rfind("?")]
+        # return new_url
 
 
 # class CheckOutSerializer(serializers.ModelSerializer):

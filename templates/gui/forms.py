@@ -2,7 +2,7 @@ from django import forms
 from profiles.models import ClientProfile, SellerProfile
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from products.models import Product
+from products.models import Product, Review
 
 
 class UserForm(UserCreationForm):
@@ -65,4 +65,13 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['title', 'description', 'price',
-                  'quantity', 'category', 'minorder', 'image']
+                  'quantity', 'category', 'minorder', 'image', 'unit']
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['user_name', 'rating', 'comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={'cols': 40, 'rows': 15})
+        }

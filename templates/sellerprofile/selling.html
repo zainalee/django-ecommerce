@@ -2,17 +2,19 @@
 {% block content %}
 {% include "sellerprofile/navbar.html"%}
 {{uid}}
-<div class="container">
+<div class="container-fluid">
     <div class="row justify-content-end">
-        <div class="col-sm-10 ">
+        <div class="col-sm-9 ">
             <h3 class="pt-4 ml-4">Sales</h3>
                 <table class="table tabel-sm">
                     <tr>
                         <th>No.</th>
                         <th>Order Id</th>
+                        <th>Image</th>
                         <th>Title</th>
                         <th>Quantity</th>
-                        <th>User</th>
+                        <th>Orderd By</th>
+                        <th>Address</th>
                         <th>City</th>
                         <th>State</th>
                         <th>Date Orderd</th>
@@ -21,16 +23,20 @@
                         {% for order,orderitems,address in detail %}
                                 {% comment %} {% if uid == orderitems.product.user_id %} {% endcomment %}
                                         {% comment %} {% if address.user == orderitems.user %} {% endcomment %}
+                                        {% if orderitems.order.complete == 1 %}
                                         <tr>
                                         <td>{{forloop.counter}}</td>
                                         <td>{{orderitems.order}}</td>
+                                        <td><img width="50px" height="50px" src="{{orderitems.product.image.url}}"></td>
                                         <td><p style="text-transform: capitalize">{{orderitems.product.title}}</p></td>
                                         <td>{{orderitems.quantity}}</td>
                                         <td>{{orderitems.user}}</td>
+                                        <td>{{address.address}}</td>
                                         <td>{{address.city}}</td>
                                         <td>{{address.state}}</td>
                                         <td>{{orderitems.date_orderd}}</td>
                                         </tr>
+                                        {% endif %}
                                         {% comment %} {% endif %} {% endcomment %}
                                 {% comment %} {% endif %} {% endcomment %}
                         {% endfor%}

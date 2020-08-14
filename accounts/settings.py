@@ -27,7 +27,7 @@ SECRET_KEY = 'i(paju$+r1j-1^uc7ocfps+hr%cm(2h8($t8d9%(7uley)_%i2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = ['epakwholesalers.herokuapp.com',
-                 '127.0.0.1', 'e7d8e34055b3.ngrok.io']
+                 '127.0.0.1', 'ade90529d188.ngrok.io']
 
 
 # Application definition
@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'bokeh',
     # The general purpose templates
     'django_adminlte',
+    'bootstrap3'
 
     # Optional: Skin for the admin interface
     # 'django_adminlte_theme',
@@ -132,7 +133,7 @@ DATABASES = {
         # mysql
 
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'epak1',
+        'NAME': 'epak2',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',

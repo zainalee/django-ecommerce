@@ -21,7 +21,7 @@ for (var i = 0; i < updateBtns.length; i++) {
 function updateUserOrder(productId, action) {
     console.log("THROUGH API")
 
-    var url = '/update_item'
+    var url = '/update_item/'
 
     fetch(url, {
             method: 'POST',
@@ -38,6 +38,6 @@ function updateUserOrder(productId, action) {
         })
         .then((data) => {
             console.log('data:', data)
-            location.reload()
+            location.reload(forceGet)
         })
 }

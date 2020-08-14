@@ -54,7 +54,7 @@
 <div class="card card-cascade card-ecommerce">
   <!--Card image-->
   <div class="view view-cascade overlay">
-    <img class="card-img-top img-responsive mx-auto d-block" style="height=200px;width=:200px" src="{{product.image.url}}"
+    <img class="card-img-top img-responsive mx-auto d-block text-center" style="height:200px;width:200px" src="{{product.image.url}}"
       alt="">
     <a>
       <div class="mask rgba-white-slight"></div>
@@ -65,8 +65,7 @@
   <!--Card content-->
   <div class="card-body card-body-cascade text-center">
     <!--Category & Title-->
-    
-    <h4 class="card-title m-0 p-0"><strong><a href="{% url 'detailview' product.id %}" >{{product.title}}</a></strong></h4>
+    <h4 class="card-title m-0 p-0" style="text-transform:capitalize"><strong><a href="{% url 'detailview' product.id %}" >{{product.title}}</a></strong></h4>
     <h5>{{product.category}}</h5>
     <!--Rating-->
     <span class="fa fa-star checked "></span>
@@ -74,17 +73,18 @@
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star"></span>
                 <span class="fa fa-star"></span>
+                <h6>Avg Rating : {{product.average_rating | floatformat}}</h6>
     <!--Description-->
-    <p class="card-text mt-0">Minimum products you can purchase <span class="badge badge-primary"> {{product.minorder}}</span></p>
+    {% comment %} <p class="card-text mt-0">Minimum products you can purchase <span class="badge badge-primary"> {{product.minorder}}</span></p> {% endcomment %}
 
     <!--Card footer-->
     <div class="card-footer">
       <span class="float-left">{{product.price}} Rs</span>
-      <span class="float-right"><a class="" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><i
+      <span class="float-right"><a class="" href="{% url 'add_to_wishlist' product.id %}" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><i
             class="fas fa-heart"></i></a></span>
             
     </div>
-    <button class=" btn btn-secondary add-btn update-cart "data-product={{product.id}} data-action="add">Add to cart</button>
+    <button class=" btn btn-success add-btn update-cart "data-product={{product.id}} data-action="add">Add to cart</button>
   </div>
   <!--/.Card content-->
 

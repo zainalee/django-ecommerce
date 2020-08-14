@@ -5,8 +5,16 @@ from django.utils.text import slugify
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 from django.conf import settings
+import numpy as np
 # from django.db import models
 # Create your models here.
+
+
+def upload_location(instance, filename, **kwargs):
+    file_path = 'blog/{author_id}/{title}-{filename}'.format(
+        author_id=str(instance.author.id), title=str(instance.title), filename=filename
+    )
+    return file_path
 
 
 class Categories(models.Model):
@@ -17,6 +25,13 @@ class Categories(models.Model):
 
 
 class Product(models.Model):
+    UNITS = (
+        ('K', ('Kilogram')),
+        ('G', ('Gram')),
+        ('L', ('Liter')),
+    )
+    unit = models.CharField(max_length=150, choices=UNITS,
+                            default='K', blank=True, null=True)
     title = models.CharField(max_length=150)
     user = models.ForeignKey(
         User, blank=True, null=True, on_delete=models.CASCADE, default=None)
@@ -30,6 +45,10 @@ class Product(models.Model):
     category = models.ForeignKey(
         Categories, default=1, on_delete=models.CASCADE)
     slug = models.SlugField(blank=True, unique=True)
+
+    def average_rating(self):
+        all_ratings = map(lambda x: x.rating, self.review_set.all())
+        return np.mean(list(all_ratings))
 
     def __str__(self):
         return self.title
@@ -48,12 +67,19 @@ def pre_save_product_post_receiever(sender, instance, *args, **kwargs):
 pre_save.connect(pre_save_product_post_receiever, sender=Product)
 
 
-class Feedback(models.Model):
-    description = models.CharField(max_length=150)
-    rating = models.CharField(max_length=10)
-
-    def __str__(self):
-        return self.rating
+class Review(models.Model):
+    RATING_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    pub_date = models.DateTimeField('date published')
+    user_name = models.CharField(max_length=100)
+    comment = models.CharField(max_length=200)
+    rating = models.IntegerField(choices=RATING_CHOICES)
 
 
 STATUS = (
@@ -126,6 +152,15 @@ class ShippingAddress(models.Model):
     def __str__(self):
         return self.address
 
+
+class Wishlist(models.Model):
+    # here CASCADE is the behavior to adopt when the referenced object(because it is a foreign key) is deleted. it is not specific to django,this is an sql standard.
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    wished_item = models.ForeignKey(Product, on_delete=models.CASCADE)
+    added_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.wished_item.title
 
 #     orderitems  = models.ManyToManyField(Cart)
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)

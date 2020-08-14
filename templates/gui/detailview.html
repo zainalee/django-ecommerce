@@ -1,4 +1,8 @@
 {% extends "gui/layout.html" %}
+{% load bootstrap3 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% block content %}
     <div class="container-fluid mt-4">
         <div class="row">
@@ -8,20 +12,112 @@
                 </div>
             </div>
             <div class="col-sm-7">
-                <h1>{{product_detail.title}}</h1>
+                <h1 style="text-transform:capitalize">{{product_detail.title}}</h1>
                 <h5 class="m-0 p-0">Product Detail :</h5> <p>{{product_detail.description}} <br><span> <b> Product by  <a href="{% url 'profile' %}">{{product_detail.user}} </a></b></span></p>
-                <span><p class="m-0 p-0">You can order minimun <b><span class="badge badge-primary"> {{product_detail.minorder}} </span> </b> Products or more</p></span>
+                {% comment %} <span><p class="m-0 p-0">You can order minimun <b><span class="badge badge-primary"> {{product_detail.minorder}} </span> </b> Products or more</p></span> {% endcomment %}
                 <h3>Product Price : <span class="text-primary">{{product_detail.price}} Rs.</span></h3>
-                <h6>Reviews :
-                <span class="fa fa-star checked "></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
+                {% if product_detail.average_rating %}
+                <h6>Average Rating : 
+                {% comment %} <span style="color: orange;" class="fa fa-star checked "></span>
+                <span style="color: orange;" class="fa fa-star checked"></span>
+                <span style="color: orange;" class="fa fa-star checked"></span>
+                <span style="color: orange;" class="fas fa-star-half"></span>
+                <span style="color: none;" class="fas fa-star"></span> {% endcomment %}
+                <span><b>{{product_detail.average_rating | floatformat}}</b></span>
                 </h6>
-                <button  class="btn btn-lg btn-primary update-cart" data-product={{product_detail.id}} data-action="add" ><b><a href="{% url 'cart' %}"style="text-decoration: none;">ADD TO CART</a></b></button>
-                 <a class="btn btn-lg btn-primary ml-2 fa fa-lg fa-heart"></a>
+                {% endif %}
+                <a href="{% url 'cart' %}"style="text-decoration: none;"><button style="text-decoration:none;"  class="btn btn-lg btn-success update-cart" data-product={{product_detail.id}} data-action="add" ><b>ADD TO CART</b></button></a>
+                 <a class="btn btn-lg btn-success ml-2 fa fa-lg fa-heart"></a>
+                 {% if request.user.is_authenticated %}
+                 <button class="btn btn-lg btn-success ml-2 button" href="#" id="buttton">Give Feedback</button>
+                 {% else %}
+                 <a class="btn btn-lg btn-success ml-2" href="{% url 'login'%}">Login To give Feedback</a>
+                 {% endif %}
             </div>
         </div>
+        {% if request.user.is_authenticated %}
+        <div class="container">
+        <div class="row justify-content-center">
+        <div class="col-lg-6">
+        <form action="" method="post" class="form" id="form" style="display:none">
+            {% csrf_token %}
+            {% bootstrap_form form layout='inline' %}
+            {% buttons %}
+            <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "star" %} Add
+            </button>
+            {% endbuttons %}
+        </form>
+        </div>
+        </div>
+        </div>
+{% endif %}
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+              <div class="col-lg-6">  
+              
+    {% if latest_review_list %}
+    <div>
+    <h4>Average rating {{product_detail.average_rating | floatformat}}</h4>
+    {% for review in latest_review_list %}
+    <div>
+        {% comment %} <h4><a href="{% url 'reviews:review_detail' review.id %}"> {% endcomment %}
+        {{ review.product.name }}
+        </a></h4>
+        {% if review.rating == 5 %}
+        <span style="color: orange;" class="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        {% endif%}
+        {% if review.rating == 4 %}
+        <span cstyle="color: orange;"lass="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span class="fa fa-star "></span>
+        {% endif%}
+        {% if review.rating == 3 %}
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span class="fa fa-star "></span>
+        <span class="fa fa-star "></span>
+        {% endif%}
+        {% if review.rating == 2 %}
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span class="fa fa-star "></span>
+        <span class="fa fa-star "></span>
+        <span class="fa fa-star "></span>
+        {% endif%}
+        {% if review.rating == 1 %}
+        <span style="color: orange;"class="fa fa-star checked"></span>
+        <span class="fa fa-star "></span>
+        <span class="fa fa-star "></span>
+        <span class="fa fa-star "></span>
+        <span class="fa fa-star "></span>
+        {% endif%}
+        <p class="p-0 m-0">{{ review.comment }}
+        <span class="p-0 m-0"> by {{ review.user_name }}</span></p>
     </div>
+    {% endfor %}
+    {% else %}
+    <p>No reviews are available.</p>
+{% endif %}
+</div>
+        </div>
+    </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function(){
+        $("button").click(function(){
+            $("form").toggle();
+         });
+        });
+    </script>
 {% endblock %}
+{% comment %} {% block custom_js %}
+
+{% endblock custom_js%} {% endcomment %}

@@ -10,4 +10,4 @@ class ProductFilter(django_filters.FilterSet):
         model = Product
         fields = '__all__'
         exclude = ['image', 'user', 'description',
-                   'price', 'quantity', 'minorder', 'category']
+                   'price', 'quantity', 'minorder', 'category', 'slug', 'unit']

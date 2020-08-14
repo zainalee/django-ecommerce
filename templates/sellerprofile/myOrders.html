@@ -15,10 +15,9 @@
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Date Ordered</th>
-                        <th>From Shop</th>
                     </tr>
                     {% for order,orderitems in detail %}
-                    {% comment %} {% if orderitems.order.complete == 1 %} {% endcomment %}
+                    {% if orderitems.order.complete == 1 %}
                     <tr>
                     <td>{{forloop.counter}}</td>
                     <td> {{order.id}} </td>
@@ -30,7 +29,7 @@
                     <td>{{orderitems.quantity}}</td>
                     <td> {{orderitems.date_orderd}} </td>
                     </tr>
-                    {% comment %} {% endif %} {% endcomment %}
+                    {% endif %}
                     {% endfor %}
                     </li>
                 </table>
